@@ -5,6 +5,7 @@
 #include <queue>
 #include <unordered_map>
 #include <limits>
+#include <string>
 
 using namespace std;
 
@@ -18,6 +19,7 @@ private:
 	double _path_weight = std::numeric_limits<double>::infinity();
 
 	unordered_map<Vertex*, double> _edges;  // Adjacent nodes to this vertice
+	int indegree;
 
 
 public:
@@ -67,6 +69,8 @@ public:
 	double getEdgeWeight(Vertex *edge) { return _edges[edge]; }
 	unordered_map<Vertex *, double> &getEdges() { return _edges; }
 	void removeEdge(Vertex *vertex) { _edges.erase(vertex); }
+	void setIn(int degree) {indegree = degree;};
+    int getIn (void) {return indegree;};
 };
 
 /**

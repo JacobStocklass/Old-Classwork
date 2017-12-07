@@ -14,6 +14,8 @@
 #include <algorithm>
 #include <list>
 #include <stack>
+#include <iostream>
+
 
 #include "Vertex.h"
 
@@ -25,6 +27,43 @@ class Graph
 	int _last_startingID = -1;
 
 public:
+    void setallindegrees()
+    {
+        int index = 0;
+        _vertices[index]->setIn(0);
+        index++;
+        _vertices[index]->setIn(0);
+        index++;
+        _vertices[index]->setIn(1);
+        index++;
+        _vertices[index]->setIn(0);
+        index++;
+        _vertices[index]->setIn(2);
+        index++;
+        _vertices[index]->setIn(1);
+        index++;
+        _vertices[index]->setIn(1);
+        index++;
+        _vertices[index]->setIn(1);
+        index++;
+        _vertices[index]->setIn(2);
+        index++;
+        _vertices[index]->setIn(1);
+        index++;
+        _vertices[index]->setIn(1);
+        index++;
+        _vertices[index]->setIn(2);
+        index++;
+        _vertices[index]->setIn(1);
+        index++;
+        _vertices[index]->setIn(1);
+        index++;
+        _vertices[index]->setIn(2);
+        index++;
+        _vertices[index]->setIn(3);
+        index++;
+        _vertices[index]->setIn(1);
+    }
 	// Remove all vertices
 	void clear() {
 		_vertices.clear();
@@ -84,7 +123,74 @@ public:
 		}
 		return ret;
 	}
-
+    list<Vertex*> getTopoSort(void)
+    {
+        //first we want to find the node with indegree of 0
+        //we'll iterate through the vector of the graph and check for indegree of zero
+        int V = _vertices.size();
+        vector<int> in_degree(V, 0);
+        vector<Vertex*>::iterator it = _vertices.begin();
+        for(it = _vertices.begin(); it < _vertices.end(); it++)
+        {
+            int ID = (*it)->getId();
+            int IN = (*it)->getIn();
+            in_degree[ID] = IN;
+        }
+        queue<int> q;
+        for(int i = 0; i < V; i++)
+        {
+            if(in_degree[i] == 0)
+            {
+                q.push(i);
+            }
+        }
+        
+        int numvert = 0;
+        
+        list<Vertex*> sorted_topo;
+        vector<int> visited(V,0);
+        
+        while(!q.empty())
+        {
+            int temp = q.front();
+            q.pop();
+            sorted_topo.push_back(_vertices[temp]);
+        
+        visited[temp] = 1;
+        //let's visit the neighbors
+        Vertex* current = _vertices[temp];
+        unordered_map<Vertex*, double> Edges = current->getEdges();
+        unordered_map<Vertex*, double>::iterator Edgesit = Edges.begin();
+        for(Edgesit = Edges.begin(); Edgesit != Edges.end(); Edgesit++)
+        {
+            int foo = (*Edgesit).first->getId();
+            in_degree[foo]--;
+            if(in_degree[foo] == 0)
+            {
+                q.push(foo);
+            }
+        }
+        numvert++;
+        }
+        
+        for(it = _vertices.begin(); it != _vertices.end(); it)
+        {
+            if(visited[(*it)->getId()] == 1)
+            {
+                _vertices.erase(it);
+            }
+            else
+            {
+                it++;
+            }
+        }
+        if(numvert != V)
+        {
+            cout<<"numvert is: "<< numvert << endl;
+            cout<<"There's a cycle or something" << endl;
+        }
+        return sorted_topo;
+    }
 };
 
 #endif

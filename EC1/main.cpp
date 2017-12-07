@@ -20,15 +20,20 @@ void run_TopoGraphTest()
 
 	Graph graph{};
 	graph.loadDotFile( "topoGraph.dot" );
+    graph.setallindegrees();
 
 	cout << "  [d] Current graph structure from topo's graph: " << endl;
 	cout << graph.to_string( true ) << endl;
 
 	cout << "  [d] ** Starting Topological Here **" << endl;
-	//list<Vertex*> topoResults = graph.getTopoSort();
+	list<Vertex*> topoResults = graph.getTopoSort();
 
-
-	cout << " [!!!!] Resulting topographical sort output goes here." << endl;
+//loop through the list to print the topo sort
+    std::list<Vertex*>::iterator it;
+    for(list<Vertex*>::iterator it = topoResults.begin(); it != topoResults.end(); it++)
+    {
+        cout<< (*it)->getId() << endl;
+    }
 	cout << " [!!!!] Valid output would look something like:" << endl;
 	cout << "  {1, 0, 8, 9, 10, 16, 2, 3, 6, 5, 15, 4, 12, 14, 7, 13, 11}" << endl;
 	cout << "  -- No, I don't know your final output because there's actually several places you could do it in different ways." << endl;
